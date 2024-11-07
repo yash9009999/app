@@ -6,13 +6,13 @@ from PIL import Image, ImageEnhance, ImageFilter
 from flask import Flask, request, render_template, redirect, url_for, send_file
 from werkzeug.utils import secure_filename
 from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker  # Updated import for SQLAlchemy 2.0
 
 # Flask Setup
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your_default_secret_key')
+
 # Database Setup
 Base = declarative_base()
 engine = create_engine('sqlite:///images.db')
@@ -155,4 +155,5 @@ def download_csv(csv_file):
 
 if __name__ == "__main__":
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Use PORT from environment, default to 5000
+    app.run(host="0.0.0.0", port=port, debug=False)  # Use production settings
